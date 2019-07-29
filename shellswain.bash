@@ -200,6 +200,7 @@ __swain_event_curry() {
 	fi
 
 	# add args to our var
+	# shellcheck disable=SC2124
 	_ev_curried[$1]+="${@:2} "
 }
 
