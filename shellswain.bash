@@ -52,8 +52,8 @@ event on after_command @_ __record_end
 
 # SHELLSWAIN CORE:
 function __after_command() {
-    event emit after_command "${PIPESTATUS[@]}"
-    trap __expand_PS0 SIGCHLD
+	event emit after_command "${PIPESTATUS[@]}"
+	trap __expand_PS0 SIGCHLD
 }
 
 function __before_first_prompt() {
@@ -61,17 +61,17 @@ function __before_first_prompt() {
 	# basically, some commands (like date) are capable of self-resetting the timezone after TZ env is cleared (which nix-shell will do before it gives control back to us)--but some other commands, like at least bash builtin printf--don't detect the need to reset it unless the TZ env is set. I think maybe this is all just bash-internal shell behavior, but amusingly it *will* reset if we call any command with the TZ env temporarily set... (...riiiight?); I've reported to bash and a fix may land in a future version (currently using 5.0.7(1)-release)
 	# reset TZ, and execute bash's best-equivalent of a no-op command
 	TZ=:/etc/localtime :
-    event emit "before_first_prompt"
-    export PROMPT_COMMAND="__after_command"
+	event emit "before_first_prompt"
+	export PROMPT_COMMAND="__after_command"
 
-    # The *INTENT* is that this only runs when no history could be loaded
-    # However:
-    # echo $HISTCMD $(echo $HISTCMD $(set -H; echo $HISTCMD))
-    # 254 1 1
-    # demonstrates that history won't just "work" in the subshell, so
-    set -o history # we turn history on
+	# The *INTENT* is that this only runs when no history could be loaded
+	# However:
+	# echo $HISTCMD $(echo $HISTCMD $(set -H; echo $HISTCMD))
+	# 254 1 1
+	# demonstrates that history won't just "work" in the subshell, so
+	set -o history # we turn history on
 
-    if [[ $HISTCMD == 1 ]]; then # no history loaded yet
+	if [[ $HISTCMD == 1 ]]; then # no history loaded yet
 		# __expand_PS0 will fail if history is empty, ex:
 		# $ fc -lr -0
 		# -bash: fc: history specification out of range
@@ -88,25 +88,25 @@ function __before_first_prompt() {
 
 
 
-    # Just trying to trick bash into launching *exactly one* subshell
-    # when it expands PS0 so we can trap the subshell exit. This enables
-    # us to run code:
-    #
-    # - outside of the subshell context (to modify persistent variables)
-    # - at the time bash expands PS0 (to track command start time)
-    #
-    # PS0 enables us to run arbitrary code before command time,
-    # but it's all in a subshell (requiring files or hacks to send data
-    # back to parent shell). DEBUG trap is the approach used by the
-    # existing bash-preexec hook (which does give it at least one big
-    # advantage: BASH_COMMAND is updated by the time debug trap runs,
-    # but NOT by the time we trap this subshell exit; we can't use
-    # BASH_COMMAND here and use fc instead.)
-    #
-    # values that didn't work here: "", "$()", "$(:)", "$(true)"
-    # shellcheck disable=SC2016,SC2034
-    PS0='``'
-    trap __expand_first_PS0 SIGCHLD
+	# Just trying to trick bash into launching *exactly one* subshell
+	# when it expands PS0 so we can trap the subshell exit. This enables
+	# us to run code:
+	#
+	# - outside of the subshell context (to modify persistent variables)
+	# - at the time bash expands PS0 (to track command start time)
+	#
+	# PS0 enables us to run arbitrary code before command time,
+	# but it's all in a subshell (requiring files or hacks to send data
+	# back to parent shell). DEBUG trap is the approach used by the
+	# existing bash-preexec hook (which does give it at least one big
+	# advantage: BASH_COMMAND is updated by the time debug trap runs,
+	# but NOT by the time we trap this subshell exit; we can't use
+	# BASH_COMMAND here and use fc instead.)
+	#
+	# values that didn't work here: "", "$()", "$(:)", "$(true)"
+	# shellcheck disable=SC2016,SC2034
+	PS0='``'
+	trap __expand_first_PS0 SIGCHLD
 }
 
 # PROMPT_COMMAND usually runs after some other command,
@@ -119,41 +119,41 @@ export PROMPT_COMMAND="__before_first_prompt"
 set -H
 
 function __expand_PS0(){
-    # We only want the first SIGCHLD
-    # remove the trap so it only fires once
-    trap - SIGCHLD
+	# We only want the first SIGCHLD
+	# remove the trap so it only fires once
+	trap - SIGCHLD
 
-    # noglob enables us to abuse how "$@" works
-    # to get each arg quoted to avoid expansion
-    # and give the handling hook the choice
-    # of whether to force expansion or not
-    set -o noglob
+	# noglob enables us to abuse how "$@" works
+	# to get each arg quoted to avoid expansion
+	# and give the handling hook the choice
+	# of whether to force expansion or not
+	set -o noglob
 
-    # $1 will be the command number, the command is the rest
-    # shellcheck disable=SC2006,SC2046
-    # -l lists, -r reverses, -0 is the "newest" item (rest just discards error)
-    set -- `fc -lr -0 2>/dev/null` # swallow "history specification out of range"
-    # preferred syntax for above has a bug that can break some user commands
-    # if they have more than one command substitution in them; revert if the bug is fixed
-    # set -- $(fc -lr -0 2> /dev/null)
-    set +o noglob
+	# $1 will be the command number, the command is the rest
+	# shellcheck disable=SC2006,SC2046
+	# -l lists, -r reverses, -0 is the "newest" item (rest just discards error)
+	set -- `fc -lr -0 2>/dev/null` # swallow "history specification out of range"
+	# preferred syntax for above has a bug that can break some user commands
+	# if they have more than one command substitution in them; revert if the bug is fixed
+	# set -- $(fc -lr -0 2> /dev/null)
+	set +o noglob
 
-    event emit before_command "$@"
+	event emit before_command "$@"
 }
 
 # special version for first run because causality is weird in prehistory...
 function __expand_first_PS0(){
 	# see __expand_PS0 above for notes/doc/comment
-    trap - SIGCHLD
-    set -o noglob
-    # shellcheck disable=SC2006,SC2046
-    set -- `fc -lr -0 2>/dev/null`
-    set +o noglob
-    # because we put in a fake command 1, this came out as 2
-    # but we're going to delete 1
-    history -d 1 # remove the fake "#shellswain init" entry
-    # and then say this was entry 1
-    event emit before_command "1" "${@:2}"
+	trap - SIGCHLD
+	set -o noglob
+	# shellcheck disable=SC2006,SC2046
+	set -- `fc -lr -0 2>/dev/null`
+	set +o noglob
+	# because we put in a fake command 1, this came out as 2
+	# but we're going to delete 1
+	history -d 1 # remove the fake "#shellswain init" entry
+	# and then say this was entry 1
+	event emit before_command "1" "${@:2}"
 
 }
 
