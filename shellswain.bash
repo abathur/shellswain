@@ -41,7 +41,7 @@ function __record_end()
 # PAUSE POTENTIAL PLUGIN: part a
 
 # if bashup_ev doesn't exist, source bashup.events
-declare -p bashup_ev &>/dev/null || source ../bashup_events/bashup.events
+declare -p bashup_ev &>/dev/null || source bashup.events
 
 # RESUME POTENTIAL PLUGIN: part b
 event on before_first_prompt @_ __record_end
