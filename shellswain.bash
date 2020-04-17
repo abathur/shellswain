@@ -151,7 +151,7 @@ function __expand_first_PS0(){
 	set +o noglob
 	# because we put in a fake command 1, this came out as 2
 	# but we're going to delete 1
-	history -d 1 # remove the fake "#shellswain init" entry
+	history -d $(($1-1)) # remove the fake "#shellswain init" entry
 	# and then say this was entry 1
 	event emit before_command "1" "${@:2}"
 
