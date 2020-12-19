@@ -1,21 +1,26 @@
 #with import <nixpkgs> {};
-{ stdenv, lib, resholved, fetchFromGitHub, pkgs, bashInteractive_5, doCheck ? true, shellcheck }:
+{ stdenv, lib, resholve, fetchFromGitHub, pkgs, bashInteractive_5, doCheck ? true, shellcheck }:
 
-resholved.buildResholvedPackage rec {
+resholve.resholvePackage rec {
   pname = "shellswain";
   version = "unreleased";
 
   src = fetchFromGitHub {
     owner = "abathur";
     repo = "shellswain";
-    rev = "9ac54210537c7ac6d6d1c8438c6a10d6e935a5fc";
+    rev = "b6753c6c17be8b021eedffd57a6918f80b914662";
     # rev = "v${version}";
-    sha256 = "1524f4k2qa8wcc6wdqkckijkahz44057d0vrmcy923pxa3rx804s";
+    sha256 = "0jninx8aasa83g38qdpzy86m71xkpk7dzz8fvnab3lyk9fll4jk0";
   };
   # src = lib.cleanSource ../../../../work/shellswain;
 
-  scripts = [ "shellswain.bash" ];
-  inputs = [ pkgs.bashup-events44 ];
+  solutions = {
+    profile = {
+      scripts = [ "bin/shellswain.bash" ];
+      interpreter = "none";
+      inputs = [ pkgs.bashup-events44 ];
+    };
+  };
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
