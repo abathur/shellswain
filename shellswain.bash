@@ -246,3 +246,14 @@ function __swain_curry(){ # "phase" "command" "other args..."
 	done
 	__swain_event_curry "$1_$2" "${to_curry[@]}"
 }
+
+# TODO: hopefully temporary workaround. Some avenues to consider:
+# - poke Nix about not clobbering this
+# - https://github.com/abathur/comity
+# Nix-shell clobbers shellswain's exit handler
+if [[ -n "$IN_NIX_SHELL" ]]; then
+  # wire up Nix-shell's exit handler before clobber
+  event on before_exit exitHandler
+  # schedule our own clobber soon...
+  event on before_first_prompt trap "event emit 'before_exit'" EXIT
+fi
