@@ -6,8 +6,8 @@ let
     owner = "abathur";
     repo = "comity";
     # rev = "b6753c6c17be8b021eedffd57a6918f80b914662";
-    rev = "v0.1.0";
-    hash = "sha256-ghi+lDdA/arMdUlpWb56OWCRKvaxzeeFurJ6Eyl4H1Y=";
+    rev = "v0.1.1";
+    hash = "sha256-qlGrLRjnKaN2s95OR+nw0ilOh7Ky8rWIRyUR9fYN0V8=";
   }) { };
 in
 resholvePackage rec {
