@@ -1,7 +1,17 @@
 #with import <nixpkgs> {};
 { stdenv, lib, resholve, fetchFromGitHub, pkgs, bashInteractive_5, doCheck ? true, shellcheck }:
 
-resholve.resholvePackage rec {
+let
+  comity = import (fetchFromGitHub {
+    owner = "abathur";
+    repo = "comity";
+    # rev = "b6753c6c17be8b021eedffd57a6918f80b914662";
+    rev = "v0.1.0";
+    hash = "sha256-ghi+lDdA/arMdUlpWb56OWCRKvaxzeeFurJ6Eyl4H1Y=";
+  }) { };
+  doCheck = true;
+in
+resholvePackage rec {
   pname = "shellswain";
   version = "unreleased";
 
@@ -18,7 +28,7 @@ resholve.resholvePackage rec {
     profile = {
       scripts = [ "bin/shellswain.bash" ];
       interpreter = "none";
-      inputs = [ pkgs.bashup-events44 ];
+      inputs = [ comity ];
     };
   };
 
@@ -27,7 +37,7 @@ resholve.resholvePackage rec {
   inherit doCheck;
   checkInputs = [ shellcheck ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Bash library supporting simple event-driven bash profile scripts & modules";
     homepage = https://github.com/abathur/shellswain;
     license = licenses.mit;
