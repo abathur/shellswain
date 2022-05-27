@@ -1,5 +1,12 @@
 # with import <nixpkgs> {};
-{ stdenv, lib, resholvePackage, fetchFromGitHub, pkgs, bashInteractive_5, doCheck ? true, shellcheck }:
+{ lib
+, resholve
+, fetchFromGitHub
+, pkgs
+, bashInteractive_5
+, doCheck ? true
+, shellcheck
+}:
 
 let
   comity = import (fetchFromGitHub {
@@ -10,7 +17,7 @@ let
     hash = "sha256-+YVKvldE/1wsu6OZWm4h6RHjzlYR+UaEDpnsa+rv3cY=";
   }) { };
 in
-resholvePackage rec {
+resholve.mkDerivation rec {
   pname = "shellswain";
   version = "unreleased";
 
