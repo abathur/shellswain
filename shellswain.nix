@@ -13,8 +13,8 @@ let
     owner = "abathur";
     repo = "comity";
     # rev = "b6753c6c17be8b021eedffd57a6918f80b914662";
-    rev = "v0.1.3";
-    hash = "sha256-+YVKvldE/1wsu6OZWm4h6RHjzlYR+UaEDpnsa+rv3cY=";
+    rev = "v0.1.4";
+    hash = "sha256-Hc7Vzw5gHCXASC19L9Gx5FECM4V7Vq+lX1cdBnGzFog=";
   }) { };
 in
 resholve.mkDerivation rec {
