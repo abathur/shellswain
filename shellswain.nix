@@ -4,19 +4,11 @@
 , fetchFromGitHub
 , pkgs
 , bashInteractive_5
+, comity
 , doCheck ? true
 , shellcheck
 }:
 
-let
-  comity = import (fetchFromGitHub {
-    owner = "abathur";
-    repo = "comity";
-    # rev = "b6753c6c17be8b021eedffd57a6918f80b914662";
-    rev = "v0.1.4";
-    hash = "sha256-Hc7Vzw5gHCXASC19L9Gx5FECM4V7Vq+lX1cdBnGzFog=";
-  }) { };
-in
 resholve.mkDerivation rec {
   pname = "shellswain";
   version = "unreleased";

@@ -1,0 +1,91 @@
+{
+  "nodes": {
+    "comity": {
+      "inputs": {
+        "flake-compat": "flake-compat",
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1664854304,
+        "narHash": "sha256-h5mmVSNfhiH0nBboDit3O2cpHoU4YMKgdkVCihBkxEw=",
+        "owner": "abathur",
+        "repo": "comity",
+        "rev": "65ac54c1787d2851f871a5c330bb9a0b2dc8c44e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abathur",
+        "ref": "flaky-breaky-heart",
+        "repo": "comity",
+        "type": "github"
+      }
+    },
+    "flake-compat": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1650374568,
+        "narHash": "sha256-Z+s0J8/r907g149rllvwhb4pKi8Wam5ij0st8PwAh+E=",
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "rev": "b4a34015c698c7793d592d66adbab377907a2be8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "edolstra",
+        "repo": "flake-compat",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1659877975,
+        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1664817920,
+        "narHash": "sha256-lGYXsICzTMOvFOcS4N/hmHxOuqnOeuHUGrETefq9u3c=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "e166ced03f34f5c22a1a643aac860003d9c409b7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "comity": "comity",
+        "flake-compat": [
+          "comity",
+          "flake-compat"
+        ],
+        "flake-utils": [
+          "comity",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "comity",
+          "nixpkgs"
+        ]
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
