@@ -73,6 +73,9 @@ function __before_first_prompt() {
 	set -o history # we turn history on
 
 	if [[ $HISTCMD == 1 ]]; then # no history loaded yet
+		# TODO: try to just swallow this error so we can avoid leaking
+	  # this implementation detail...
+
 		# __expand_PS0 will fail if history is empty, ex:
 		# $ fc -lr -0
 		# -bash: fc: history specification out of range
@@ -205,7 +208,7 @@ function __shellswain_command_init_hook(){
 	event once "__shellswain_init_command_$1" @_ "$2" "$1" "${@:3}"
 }
 
-# "phase" "command" "callback" "other args..."
+# <phase> <command> <callback> [<other args>...]"
 function __swain_phase_listen(){
 	event on "$1_$2" @_ "$3" "${@:4}"
 }
@@ -216,6 +219,7 @@ function __swain_phase_run(){ # "phase" "command" "other args..."
 
 	event emit "${phase}_${target}" "${@}"
 }
+
 function __swain_run(){
 	__swain_phase_run "before" "$@"
 	__swain_phase_run "run" "${@}"

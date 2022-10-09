@@ -13,3 +13,4 @@ uninstall:
 # excluding SC1091 (finding a sourced file) for now because it requires bashup.events to be on the path
 check:
 	shellcheck -x -e SC1091 ./shellswain.bash
+	SHELLSWAIN=${PWD}/shellswain.bash bats tests/

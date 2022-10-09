@@ -3,10 +3,12 @@
 , resholve
 , fetchFromGitHub
 , pkgs
-, bashInteractive_5
+, bashInteractive
 , comity
 , doCheck ? true
 , shellcheck
+, bats
+, socat
 }:
 
 resholve.mkDerivation rec {
@@ -23,6 +25,10 @@ resholve.mkDerivation rec {
   # };
   # src = lib.cleanSource ../../../../work/shellswain;
 
+  prePatch = ''
+    patchShebangs tests
+  '';
+
   solutions = {
     profile = {
       scripts = [ "bin/shellswain.bash" ];
@@ -34,7 +40,9 @@ resholve.mkDerivation rec {
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
   inherit doCheck;
-  checkInputs = [ shellcheck ];
+  checkInputs = [ shellcheck bats comity bashInteractive socat ];
+
+  inherit bashInteractive;
 
   meta = with lib; {
     description = "Bash library supporting simple event-driven bash profile scripts & modules";
