@@ -26,7 +26,7 @@ function __record_start()
 
 # immediately record start time; if we do a good job of optimizing
 # where this falls in the overall load it can report rough startup time
-__record_start 0 "#profile init"
+__record_start 0 "#shellswain init"
 
 
 function __record_end()
