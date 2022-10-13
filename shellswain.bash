@@ -131,7 +131,12 @@ trap "event emit 'before_exit'" HUP EXIT
 # <command> <init callback>
 function __shellswain_track(){
 	# shellcheck disable=SC2139
-	alias "$1=__shellswain_init_command $1 $2"
+	if [[ $(type -ft "$1") == "alias" ]]; then
+		echo "shellswain doesn't currently track aliases ($1)"
+		return 1
+	else
+		alias "$1=__shellswain_init_command $1 $2"
+	fi
 }
 
 # <command> <init callback>
