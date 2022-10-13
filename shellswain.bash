@@ -68,26 +68,6 @@ function __before_first_prompt() {
 	# demonstrates that history won't just "work" in the subshell, so
 	set -o history # we turn history on
 
-	if [[ $HISTCMD == 1 ]]; then # no history loaded yet
-		# TODO: try to just swallow this error so we can avoid leaking
-	  # this implementation detail...
-
-		# __expand_PS0 will fail if history is empty, ex:
-		# $ fc -lr -0
-		# -bash: fc: history specification out of range
-
-		# This fix is dumb, and there may be a better way,
-		# we just pre-stuff the history with a bogus entry
-		history -s "#shellswain init"
-	fi
-
-	# and for reasons I don't understand well, if we turn history back off
-	# it also nukes it in the parent shell. I don't trust this explanation
-	# but it's my best guess at the moment and I don't want to spend the time
-	# nailing down exact behavior here.
-
-
-
 	# Just trying to trick bash into launching *exactly one* subshell
 	# when it expands PS0 so we can trap the subshell exit. This enables
 	# us to run code:
@@ -106,7 +86,7 @@ function __before_first_prompt() {
 	# values that didn't work here: "", "$()", "$(:)", "$(true)"
 	# shellcheck disable=SC2016,SC2034
 	PS0='``'
-	trap __expand_first_PS0 SIGCHLD
+	trap __expand_PS0 SIGCHLD
 }
 
 # PROMPT_COMMAND usually runs after some other command,
@@ -136,25 +116,10 @@ function __expand_PS0(){
 	# preferred syntax for above has a bug that can break some user commands
 	# if they have more than one command substitution in them; revert if the bug is fixed
 	# set -- $(fc -lr -0 2> /dev/null)
+	# TODO: try swapping this back when all else is stable
 	set +o noglob
 
 	event emit before_command "$@"
-}
-
-# special version for first run because causality is weird in prehistory...
-function __expand_first_PS0(){
-	# see __expand_PS0 above for notes/doc/comment
-	trap - SIGCHLD
-	set -o noglob
-	# shellcheck disable=SC2006,SC2046
-	set -- `fc -lr -0 2>/dev/null`
-	set +o noglob
-	# because we put in a fake command 1, this came out as 2
-	# but we're going to delete 1
-	history -d $(($1-1)) # remove the fake "#shellswain init" entry
-	# and then say this was entry 1
-	event emit before_command "1" "${@:2}"
-
 }
 
 trap "event emit 'before_exit'" HUP EXIT
