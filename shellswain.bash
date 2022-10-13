@@ -58,10 +58,6 @@ function __after_command() {
 }
 
 function __before_first_prompt() {
-	# TODO: write a test for this workaround so that I can rm it if it becomes irrelevant
-	# basically, some commands (like date) are capable of self-resetting the timezone after TZ env is cleared (which nix-shell will do before it gives control back to us)--but some other commands, like at least bash builtin printf--don't detect the need to reset it unless the TZ env is set. I think maybe this is all just bash-internal shell behavior, but amusingly it *will* reset if we call any command with the TZ env temporarily set... (...riiiight?); I've reported to bash and a fix may land in a future version (currently using 5.0.7(1)-release)
-	# reset TZ, and execute bash's best-equivalent of a no-op command
-	TZ=:/etc/localtime :
 	event emit "before_first_prompt"
 	export PROMPT_COMMAND="__after_command"
 
