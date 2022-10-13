@@ -9,19 +9,16 @@ SHELLSWAIN_ABOARD=1
 # associative array, global, export
 declare -Ax shellswain
 
-# local reference for shorter use
-declare -n cox=shellswain
-
 # START POTENTIAL PLUGIN: PART A
 function __record_start()
 {
-	cox[command_number]=$1
-	cox[command]="${*:2}" # un-expanded
-	cox[start_timestamp]="${EPOCHREALTIME/.}"
+	shellswain[command_number]=$1
+	shellswain[command]="${*:2}" # un-expanded
+	shellswain[start_timestamp]="${EPOCHREALTIME/.}"
 
 	# builtin printf much faster than external date
 	# shellcheck disable=SC2102,SC2183
-	printf -v cox[start_time] '%(%a %b %d %Y %T)T'
+	printf -v shellswain[start_time] '%(%a %b %d %Y %T)T'
 }
 
 # immediately record start time; if we do a good job of optimizing
@@ -31,12 +28,12 @@ __record_start 0 "#shellswain init"
 
 function __record_end()
 {
-	cox[pipestatus]=$*
-	cox[end_timestamp]="${EPOCHREALTIME/.}"
+	shellswain[pipestatus]=$*
+	shellswain[end_timestamp]="${EPOCHREALTIME/.}"
 
 	# shellcheck disable=SC2102,SC2183
-	printf -v cox[end_time] '%(%a %b %d %Y %T)T'
-	cox[duration]=$((cox[end_timestamp] - cox[start_timestamp]))
+	printf -v shellswain[end_time] '%(%a %b %d %Y %T)T'
+	shellswain[duration]=$((shellswain[end_timestamp] - shellswain[start_timestamp]))
 }
 # PAUSE POTENTIAL PLUGIN: part a
 
