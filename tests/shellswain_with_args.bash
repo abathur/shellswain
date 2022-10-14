@@ -35,7 +35,7 @@ __swain_phase_listen "before" "$1" before args
 __swain_phase_listen "after" "$1" after args
 # DOING: below is tentative to nail down current behavior, but not how we actually want this to work.
 weirdargbro=eardwargbro
-__swain_curry "after" "$1" weirdargbro
+__swain_curry_phase_args "after" "$1" weirdargbro
 __shellswain_track "$1" :
 ret=$?
 

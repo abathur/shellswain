@@ -3,12 +3,8 @@
 , resholve
 , fetchFromGitHub
 , pkgs
-, bashInteractive
 , comity
-, doCheck ? true
-, shellcheck
-, bats
-, socat
+, callPackage
 }:
 
 resholve.mkDerivation rec {
@@ -39,10 +35,10 @@ resholve.mkDerivation rec {
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 
-  inherit doCheck;
-  checkInputs = [ shellcheck bats comity bashInteractive socat ];
+  doCheck = false;
 
-  inherit bashInteractive;
+  # TODO: below likely needs fixing
+  passthru.tests = callPackage ./test.nix { };
 
   meta = with lib; {
     description = "Bash library supporting simple event-driven bash profile scripts & modules";

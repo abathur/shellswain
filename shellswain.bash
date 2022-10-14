@@ -25,7 +25,6 @@ function __record_start()
 # where this falls in the overall load it can report rough startup time
 __record_start 0 "#shellswain init"
 
-
 function __record_end()
 {
 	shellswain[pipestatus]=$*
@@ -192,25 +191,7 @@ function __swain_run(){
 	return $ret
 }
 
-# hack curry functionality atop bashup.events
-# TODO: if you make a modular build process to separate the core/plugin parts, consider also extracting this bit?
-declare -gA _ev_curried
-__swain_event_curry() {
-	if ! [[ -v "_ev_curried[$1]" ]] ; then # no key == first time setup
-		# inject our var; clear it (unset is slower); original string
-		bashup_ev[$1]="set -- \"$1\" \${_ev_curried[$1]} \"\${@:2}\"; _ev_curried[$1]=''; ${bashup_ev[$1]}"
-	fi
-
-	# add args to our var
-	# shellcheck disable=SC2124
-	_ev_curried[$1]+="${@:2} "
-}
-
-function __swain_curry(){ # "phase" "command" "other args..."
-	# NOTE: quoted arrays per shellcheck, in case they bug out
-	local -a to_curry
-	for i in "${@:3}"; do
-		to_curry+=("$i=${!i}")
-	done
-	__swain_event_curry "$1_$2" "${to_curry[@]}"
+# curry some args for a specific phase+command pair
+function __swain_curry_phase_args(){ # "phase" "command" "other args..."
+	event curry "$1_$2" "${@:3}"
 }

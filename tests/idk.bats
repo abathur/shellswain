@@ -58,7 +58,7 @@ CASES
     line 1 equals "PROMPT>"
     line 2 equals 'on_init'
     line 3 equals "before args --help"
-    line -3 equals "after args weirdargbro=eardwargbro --help"
+    line -3 equals "after args weirdargbro --help"
     line -2 equals "PROMPT>"
     # this kinda tests history--but note that we do have to
     # synthesize the history addition with `history -s`--it

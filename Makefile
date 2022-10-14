@@ -3,6 +3,11 @@ prefix ?= /usr/local
 bindir ?= ${prefix}/bin
 
 .PHONY: install uninstall check
+
+build:
+	# caution: below is meant to be run out of tree in nix
+	cat bashup.events.curry.bash >> shellswain.bash
+
 install:
 	mkdir -p ${DESTDIR}${bindir}
 	install shellswain.bash ${DESTDIR}${bindir}

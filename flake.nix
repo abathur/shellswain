@@ -36,10 +36,13 @@
             })
           ];
         };
-      in
-        {
-          packages.default = pkgs.callPackage ./shellswain.nix { };
-          devShell = pkgs.callPackage ./shell.nix { };
+      in rec {
+          packages.shellswain = pkgs.callPackage ./shellswain.nix { };
+          packages.default = self.packages.${system}.shellswain;
+          checks = pkgs.callPackages ./test.nix {
+            inherit (packages) shellswain;
+          };
+          # devShell = pkgs.callPackage ./shell.nix { };
         }
     );
 }
