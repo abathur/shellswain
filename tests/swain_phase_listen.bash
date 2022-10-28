@@ -10,7 +10,7 @@ fern(){
 
 alias alfred=fern
 
-source $SHELLSWAIN
+source shellswain.bash
 
 before(){
 	echo before $@
@@ -24,10 +24,10 @@ after(){
 	echo after $@
 }
 
-__swain_phase_listen "before" "$1" before args
-__swain_phase_listen "run" "$1" run args
-__swain_phase_listen "after" "$1" after args
-__shellswain_track "$1" :
+swain.phase.listen "before" "$1" before args
+swain.phase.listen "run" "$1" run args
+swain.phase.listen "after" "$1" after args
+swain.track "$1" :
 ret=$?
 
 eval "

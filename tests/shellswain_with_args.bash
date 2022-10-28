@@ -2,6 +2,7 @@
 
 # TODO: abstract/dedupe across tests, or maybe just collapse all of this base API stuff into a single integration test
 
+# TODO: fold expand_aliases down into the API if it's essential?
 shopt -s expand_aliases
 
 export PS1='PROMPT>'
@@ -12,7 +13,7 @@ fern(){
 
 alias alfred=fern
 
-source $SHELLSWAIN
+source shellswain.bash
 
 on_init(){
 	echo on_init
@@ -30,32 +31,34 @@ after(){
 	echo after $@
 }
 
-__shellswain_command_init_hook "$1" on_init
-__swain_phase_listen "before" "$1" before args
-__swain_phase_listen "after" "$1" after args
+swain.hook.init_command "$1" on_init
+swain.phase.listen "before" "$1" before args
+swain.phase.listen "after" "$1" after args
 # DOING: below is tentative to nail down current behavior, but not how we actually want this to work.
 weirdargbro=eardwargbro
-__swain_curry_phase_args "after" "$1" weirdargbro
-__shellswain_track "$1" :
+swain.phase.curry_args "after" "$1" weirdargbro
+swain.track "$1" :
 ret=$?
 
 eval "
 _test(){
-	eval \"\$PROMPT_COMMAND\"
 	history -s $@
 	eval \"\${PS0@P}\"
 	$@
+	eval \"\${PROMPT_COMMAND[1]}\"
 	echo \"\${PS1@P}\"
 }
 "
 
 # simulate first prompt
-eval "$PROMPT_COMMAND"
-eval "${PS0@P}"
+# eval "${PS0@P}"
+eval "${PROMPT_COMMAND[1]}"
 echo "${PS1@P}"
 
+# set -x
 _test
+# set +x
 
-echo executed:${shellswain[command]}
+echo executed:${swain[command]}
 
 exit $ret

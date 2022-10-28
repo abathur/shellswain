@@ -3,7 +3,6 @@ load helpers
 # the public API per shell-hag:
 
 # TODO: abstract out all of this socat cruft
-# TODO: at least one iteration of these should test the actual args alignment (probably all @ once)
 
 @test "can track commands" {
   require <({

@@ -10,14 +10,14 @@ fern(){
 
 alias alfred=fern
 
-source $SHELLSWAIN
+source shellswain.bash
 
 on_init(){
 	echo on_init
 }
 
-__shellswain_command_init_hook "$1" on_init
-__shellswain_track "$1" :
+swain.hook.init_command "$1" on_init
+swain.track "$1" :
 ret=$?
 
 eval "

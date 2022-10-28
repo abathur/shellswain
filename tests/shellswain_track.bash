@@ -10,9 +10,9 @@ fern(){
 
 alias alfred=fern
 
-source $SHELLSWAIN
+source shellswain.bash
 
-__shellswain_track "$1" _make_sure
+swain.track "$1" _make_sure
 ret=$?
 
 eval "_make_sure(){
