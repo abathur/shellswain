@@ -57,6 +57,7 @@ CASES
     line 1 equals "PROMPT>"
     line 2 equals 'on_init'
     line 3 equals "before args --help"
+    line 4 begins "Usage: cp" # make sure it ran!
     line -3 equals "after args weirdargbro --help"
     line -2 equals "PROMPT>"
     # this kinda tests history--but note that we do have to

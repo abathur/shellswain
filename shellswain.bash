@@ -187,9 +187,9 @@ function swain._init_command(){
 	event fire "swain:command:$1:init"
 
 	# if no hook added a runner, set a default
-	if ! event has "swain:command:$1:run"; then
+	if ! event has "swain:phase:run:$1"; then
 		# Note: if default runner ever needs to do anything more than just run this, make it a function
-		event on "swain:command:$1:run" @_ command "$1"
+		event on "swain:phase:run:$1" @_ command "$1"
 
 	fi
 
