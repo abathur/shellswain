@@ -19,9 +19,9 @@ resholve.mkDerivation rec {
   # };
   # src = lib.cleanSource ../../../../work/shellswain;
 
-  prePatch = ''
-    patchShebangs tests
-  '';
+  # prePatch = ''
+  #   patchShebangs tests
+  # '';
 
   solutions = {
     profile = {

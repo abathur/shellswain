@@ -10,6 +10,9 @@ rec {
   upstream = shellswain.unresholved.overrideAttrs (old: {
     name = "${shellswain.name}-tests";
     dontInstall = true; # just need the build directory
+    prePatch = ''
+      patchShebangs tests
+    '';
     installCheckInputs = [
       shellswain
       shellcheck
