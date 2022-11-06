@@ -1,0 +1,27 @@
+name: "Canary: do I work against latest nixpkgs?"
+
+on:
+  schedule:
+    # every sunday morning
+    - cron: "0 0 * * 0"
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+      fail-fast: false
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0 # no shallow
+    - uses: cachix/install-nix-action@v18
+      with:
+        nix_path: nixpkgs=channel:nixpkgs-unstable
+    - name: traditional nix-build succeeds
+      run: nix-build
+    - name: update the lockfile
+      run: nix flake update
+    - name: flake build + tests
+      run: nix flake check --print-build-logs
