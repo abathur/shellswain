@@ -13,19 +13,14 @@
       flake = false;
       follows = "comity/flake-compat";
     };
-    /* TODO:
-      comity = import (fetchFromGitHub {
-      owner = "abathur";
-      repo = "comity";
-      # rev = "b6753c6c17be8b021eedffd57a6918f80b914662";
-      rev = "v0.1.4";
-      hash = "sha256-Hc7Vzw5gHCXASC19L9Gx5FECM4V7Vq+lX1cdBnGzFog=";
-    }) { };
-    */
     comity.url = "github:abathur/comity/flaky-breaky-heart";
+    bats-require = {
+      url = "github:abathur/bats-require";
+      follows = "comity/bats-require";
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils, flake-compat, comity }:
+  outputs = { self, nixpkgs, flake-utils, flake-compat, comity, bats-require }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
@@ -33,6 +28,7 @@
           overlays = [
             (final: prev: {
               comity = comity.packages."${system}".default;
+              bats-require = bats-require.packages."${system}".default;
             })
           ];
         };

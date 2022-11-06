@@ -1,17 +1,47 @@
 {
   "nodes": {
+    "bats-require": {
+      "inputs": {
+        "flake-compat": [
+          "comity",
+          "flake-compat"
+        ],
+        "flake-utils": [
+          "comity",
+          "flake-utils"
+        ],
+        "nixpkgs": [
+          "comity",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1667714099,
+        "narHash": "sha256-weclRC3Q1Pc7Y1r7sAn3jx7ZzfeHKTkfdsByZY/Aufw=",
+        "owner": "abathur",
+        "repo": "bats-require",
+        "rev": "e91503509d206cfa8be1f7003ac1af2968994dca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "abathur",
+        "repo": "bats-require",
+        "type": "github"
+      }
+    },
     "comity": {
       "inputs": {
+        "bats-require": "bats-require",
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1664854304,
-        "narHash": "sha256-h5mmVSNfhiH0nBboDit3O2cpHoU4YMKgdkVCihBkxEw=",
+        "lastModified": 1667754877,
+        "narHash": "sha256-XW7QobRZAn0UDbHSY301yqwVbdSntzueCixIKUCW8JQ=",
         "owner": "abathur",
         "repo": "comity",
-        "rev": "65ac54c1787d2851f871a5c330bb9a0b2dc8c44e",
+        "rev": "64bcafdebbf8b60e75be583b5bd8b76641ca7447",
         "type": "github"
       },
       "original": {
@@ -39,11 +69,11 @@
     },
     "flake-utils": {
       "locked": {
-        "lastModified": 1659877975,
-        "narHash": "sha256-zllb8aq3YO3h8B/U0/J1WBgAL8EX5yWf5pMj3G0NAmc=",
+        "lastModified": 1667395993,
+        "narHash": "sha256-nuEHfE/LcWyuSWnS8t12N1wc105Qtau+/OdUAjtQ0rA=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "c0e246b9b83f637f4681389ecabcb2681b4f3af0",
+        "rev": "5aed5285a952e0b949eb3ba02c12fa4fcfef535f",
         "type": "github"
       },
       "original": {
@@ -54,11 +84,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1664817920,
-        "narHash": "sha256-lGYXsICzTMOvFOcS4N/hmHxOuqnOeuHUGrETefq9u3c=",
+        "lastModified": 1667639549,
+        "narHash": "sha256-frqZKSG/933Ctwl9voSZnXDwo8CqddXcjQhnCzwNqaM=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "e166ced03f34f5c22a1a643aac860003d9c409b7",
+        "rev": "cae3751e9f74eea29c573d6c2f14523f41c2821a",
         "type": "github"
       },
       "original": {
@@ -70,6 +100,10 @@
     },
     "root": {
       "inputs": {
+        "bats-require": [
+          "comity",
+          "bats-require"
+        ],
         "comity": "comity",
         "flake-compat": [
           "comity",

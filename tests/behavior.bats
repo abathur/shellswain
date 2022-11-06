@@ -1,8 +1,7 @@
+bats_load_library bats-require
 load helpers
 
-# the public API per shell-hag:
-
-# TODO: abstract out all of this socat cruft
+# TODO: abstract out all of this unbuffer cruft?
 
 @test "can track commands" {
   require <({
@@ -10,9 +9,9 @@ load helpers
     line 1 begins "captured call to"
   })
 } <<CASES
-socat stdio exec:."/shellswain_track.bash cp --help",pty,setsid,echo=0,crlf
-socat stdio exec:"./shellswain_track.bash shopt -p expand_aliases",pty,setsid,echo=0,crlf
-socat stdio exec:"./shellswain_track.bash fern",pty,setsid,echo=0,crlf
+unbuffer ./shellswain_track.bash cp --help
+unbuffer ./shellswain_track.bash shopt -p expand_aliases
+unbuffer ./shellswain_track.bash fern
 CASES
 
 # TODO: maybe worth figuring out a way to implement this. Mainly just a problem of figuring out how to "rename" the existing alias without losing any part of it. Worth searching for ~renaming a bash alias before inventing something
@@ -23,7 +22,7 @@ CASES
     line 2 equals "hehe"
   })
 } <<CASES
-socat stdio exec:"./shellswain_track.bash alfred",pty,setsid,echo=0,crlf
+unbuffer ./shellswain_track.bash alfred
 CASES
 
 @test "runs deferred one-time init hook" {
@@ -32,9 +31,9 @@ CASES
     line 1 begins "on_init"
   })
 } <<CASES
-socat stdio exec:."/shellswain_command_init_hook.bash cp --help",pty,setsid,echo=0,crlf
-socat stdio exec:"./shellswain_command_init_hook.bash shopt -p expand_aliases",pty,setsid,echo=0,crlf
-socat stdio exec:"./shellswain_command_init_hook.bash fern",pty,setsid,echo=0,crlf
+unbuffer ./shellswain_command_init_hook.bash cp --help
+unbuffer ./shellswain_command_init_hook.bash shopt -p expand_aliases
+unbuffer ./shellswain_command_init_hook.bash fern
 CASES
 
 @test "runs before/run/after hooks" {
@@ -45,9 +44,9 @@ CASES
     line 3 begins "after args"
   })
 } <<CASES
-socat stdio exec:."/swain_phase_listen.bash cp --help",pty,setsid,echo=0,crlf
-socat stdio exec:"./swain_phase_listen.bash shopt -p expand_aliases",pty,setsid,echo=0,crlf
-socat stdio exec:"./swain_phase_listen.bash fern",pty,setsid,echo=0,crlf
+unbuffer ./swain_phase_listen.bash cp --help
+unbuffer ./swain_phase_listen.bash shopt -p expand_aliases
+unbuffer ./swain_phase_listen.bash fern
 CASES
 
 
@@ -66,7 +65,7 @@ CASES
     line -1 equals "executed:cp --help"
   })
 } <<CASES
-socat stdio exec:."/shellswain_with_args.bash cp --help",pty,setsid,echo=0,crlf
+unbuffer ./shellswain_with_args.bash cp --help
 CASES
 
 

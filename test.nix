@@ -1,18 +1,25 @@
 { shellswain
 , shellcheck
 , bats
+, bats-require
 , bashInteractive
-, socat
+, expect
 }:
 
 rec {
   upstream = shellswain.unresholved.overrideAttrs (old: {
     name = "${shellswain.name}-tests";
     dontInstall = true; # just need the build directory
-    installCheckInputs = [ shellswain shellcheck bats bashInteractive socat ];
+    installCheckInputs = [
+      shellswain
+      shellcheck
+      (bats.withLibraries (p: [ bats-require ]))
+      bashInteractive
+      expect
+    ];
     doInstallCheck = true;
     installCheckPhase = ''
-      ${bats}/bin/bats tests
+      make check
       touch $out
     '';
   });

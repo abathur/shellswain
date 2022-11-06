@@ -1,8 +1,6 @@
 # with import <nixpkgs> {};
 { lib
 , resholve
-, fetchFromGitHub
-, pkgs
 , comity
 , callPackage
 }:
