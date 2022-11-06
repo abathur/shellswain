@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO: abstract or dedupe across tests
-
-shopt -s expand_aliases
-
 fern(){
 	echo hehe
 }

@@ -2,8 +2,6 @@
 
 # TODO: abstract/dedupe across tests, or maybe just collapse all of this base API stuff into a single integration test
 
-shopt -s expand_aliases
-
 fern(){
 	echo hehe
 }

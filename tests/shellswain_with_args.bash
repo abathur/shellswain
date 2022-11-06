@@ -2,9 +2,6 @@
 
 # TODO: abstract/dedupe across tests, or maybe just collapse all of this base API stuff into a single integration test
 
-# TODO: fold expand_aliases down into the API if it's essential?
-shopt -s expand_aliases
-
 export PS1='PROMPT>'
 
 fern(){
