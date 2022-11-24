@@ -22,10 +22,9 @@
 
   outputs = { self, nixpkgs, flake-utils, flake-compat, comity, bats-require }:
     {
-      overlays.default = final: prev: {
+      overlays.default = nixpkgs.lib.composeExtensions comity.overlays.default (final: prev: {
         shellswain = final.callPackage ./shellswain.nix { };
-      };
-      overlays.comity = comity.overlays.default;
+      });
       # shell = ./shell.nix;
     } // flake-utils.lib.eachDefaultSystem (system:
       let
