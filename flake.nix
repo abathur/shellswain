@@ -25,6 +25,7 @@
       overlays.default = final: prev: {
         shellswain = final.callPackage ./shellswain.nix { };
       };
+      overlays.comity = comity.overlays.default;
       # shell = ./shell.nix;
     } // flake-utils.lib.eachDefaultSystem (system:
       let
