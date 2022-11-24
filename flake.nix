@@ -21,24 +21,30 @@
   };
 
   outputs = { self, nixpkgs, flake-utils, flake-compat, comity, bats-require }:
-    flake-utils.lib.eachDefaultSystem (system:
+    {
+      overlays.default = final: prev: {
+        shellswain = final.callPackage ./shellswain.nix { };
+      };
+      # shell = ./shell.nix;
+    } // flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
           inherit system;
           overlays = [
-            (final: prev: {
-              comity = comity.packages."${system}".default;
-              bats-require = bats-require.packages."${system}".default;
-            })
+            bats-require.overlays.default
+            comity.overlays.default
+            self.overlays.default
           ];
         };
-      in rec {
-          packages.shellswain = pkgs.callPackage ./shellswain.nix { };
-          packages.default = self.packages.${system}.shellswain;
-          checks = pkgs.callPackages ./test.nix {
-            inherit (packages) shellswain;
+      in
+        {
+          packages = {
+            inherit (pkgs) shellswain;
+            default = pkgs.shellswain;
           };
-          # devShell = pkgs.callPackage ./shell.nix { };
+          checks = pkgs.callPackages ./test.nix {
+            inherit (pkgs) shellswain;
+          };
         }
     );
 }
