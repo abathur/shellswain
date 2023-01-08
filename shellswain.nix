@@ -1,4 +1,3 @@
-# with import <nixpkgs> {};
 { lib
 , resholve
 , comity
@@ -17,11 +16,6 @@ resholve.mkDerivation rec {
   #   # rev = "v${version}";
   #   sha256 = "0jninx8aasa83g38qdpzy86m71xkpk7dzz8fvnab3lyk9fll4jk0";
   # };
-  # src = lib.cleanSource ../../../../work/shellswain;
-
-  # prePatch = ''
-  #   patchShebangs tests
-  # '';
 
   solutions = {
     profile = {
