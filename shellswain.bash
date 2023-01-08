@@ -53,9 +53,8 @@ function swain._record_end()
 }
 # PAUSE POTENTIAL PLUGIN: part a
 
-# if bashup_ev doesn't exist, source comity.bash
-# (which also pulls in bashup.events)
-[[ -v "bashup_ev[@]" ]] || source comity.bash
+# save time if it's already loaded
+[[ -v __comity_signal_map ]] || source comity.bash
 
 # RESUME POTENTIAL PLUGIN: part b
 event on swain:before_first_prompt @_ swain._record_end
