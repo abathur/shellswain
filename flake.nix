@@ -13,7 +13,7 @@
       flake = false;
       follows = "comity/flake-compat";
     };
-    comity.url = "github:abathur/comity/flaky-breaky-heart";
+    comity.url = "github:abathur/comity";
     bats-require = {
       url = "github:abathur/bats-require";
       follows = "comity/bats-require";

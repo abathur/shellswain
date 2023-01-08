@@ -37,16 +37,15 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1669258744,
-        "narHash": "sha256-nBjidVcC8X8Ikrp1qisedav0xserBLL3qscLOFqcUXs=",
+        "lastModified": 1673141466,
+        "narHash": "sha256-MeUMYto8o6fCi3h4CYtO9axryNk+vgy7H1EppWq13KM=",
         "owner": "abathur",
         "repo": "comity",
-        "rev": "d37bebec336a78d391525bf318a52e5018440495",
+        "rev": "b3f7f9a529fb7fdc850f752ba2412f8ee429b946",
         "type": "github"
       },
       "original": {
         "owner": "abathur",
-        "ref": "flaky-breaky-heart",
         "repo": "comity",
         "type": "github"
       }
