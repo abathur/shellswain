@@ -23,23 +23,14 @@ SHELLSWAIN_ABOARD=${#PROMPT_COMMAND[@]}
 # associative array, global, export
 declare -Ax swain
 
-# START POTENTIAL PLUGIN: PART A
-function swain._record_start()
-{
-	# builtin printf much faster than external date
-	# shellcheck disable=SC2102,SC2183
-	printf -v swain[start_time] '%(%a %b %d %Y %T)T'
-
-	swain[command_number]=$1
-	swain[command]="${*:2}" # un-expanded
-
-	# record timestamp, which we use to calculate duration, last
-	swain[start_timestamp]="${EPOCHREALTIME/.}"
-}
-
 # immediately record start time; if we do a good job of optimizing
 # where this falls in the overall load it can report rough startup time
-swain._record_start 0 "#shellswain init"
+swain[start_timestamp]="${EPOCHREALTIME/.}"
+# builtin printf much faster than external date
+# shellcheck disable=SC2102,SC2183
+printf -v swain[start_time] '%(%a %b %d %Y %T)T'
+swain[command_number]=0
+swain[command]="#shellswain init"
 
 function swain._record_end()
 {
@@ -51,25 +42,19 @@ function swain._record_end()
 	# shellcheck disable=SC2102,SC2183
 	printf -v swain[end_time] '%(%a %b %d %Y %T)T'
 }
-# PAUSE POTENTIAL PLUGIN: part a
 
 # save time if it's already loaded
 [[ -v __comity_signal_map ]] || source comity.bash
 
-# RESUME POTENTIAL PLUGIN: part b
-event on swain:before_first_prompt @_ swain._record_end
-event on swain:before_command @_ swain._record_start
-event on swain:after_command @_ swain._record_end
-# END POTENTIAL PLUGIN: part b
-
-
 # SHELLSWAIN CORE:
 function swain._after_command() {
+	swain._record_end "${PIPESTATUS[@]}"
 	event emit "swain:after_command" "${PIPESTATUS[@]}"
 	trap "swain._expand_PS0" SIGCHLD
 }
 
 function swain._before_first_prompt() {
+	swain._record_end
 	event emit "swain:before_first_prompt"
 	PROMPT_COMMAND[$SHELLSWAIN_ABOARD]="swain._after_command"
 
@@ -147,7 +132,20 @@ function swain._expand_PS0(){
 	# bites you.
 	set +o noglob
 
+	# shellcheck disable=SC2102,SC2183
+	printf -v swain[start_time] '%(%a %b %d %Y %T)T'
+
+	swain[command_number]=$1
+	swain[command]="${*:2}" # un-expanded
+
+	# record timestamp once before emitting so that plugins can use it
+	# Caution: this might be a misfeature
+	swain[start_timestamp]="${EPOCHREALTIME/.}"
+
 	event emit "swain:before_command" "$@"
+	# re-record timestamp, which we use to calculate duration, to avoid
+	# counting the time taken to run plugin before_command listeners.
+	swain[start_timestamp]="${EPOCHREALTIME/.}"
 }
 
 trap "event emit 'swain:before_exit'" HUP EXIT
@@ -200,12 +198,12 @@ function swain._init_command(){
 }
 
 # register a callback (and args) for deferred one-time setup
-# <command> <callback> <all other args>
+# <command> <callback> [<other args>...]
 function swain.hook.init_command(){
 	event once "swain:command:$1:init" @_ "$2" "$1" "${@:3}"
 }
 
-# <phase> <command> <callback> [<other args>...]"
+# <phase> <command> <callback> [<other args>...]
 function swain.phase.listen(){
 	event on "swain:phase:$1:$2" @_ "$3" "${@:4}"
 }
@@ -216,7 +214,6 @@ function swain.phase._run(){ # <phase> <command> [<other args>...]
 
 
 function swain._run(){
-# <phase> <command> [<other args>...]
 	swain.phase._run "before" "$@"
 	swain.phase._run "run" "$@"
 	local ret=$?
