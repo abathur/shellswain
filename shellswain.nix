@@ -6,7 +6,7 @@
 
 resholve.mkDerivation rec {
   pname = "shellswain";
-  version = "unreleased";
+  version = "0.1.0";
 
   src = lib.cleanSource ./.;
   # src = fetchFromGitHub {
