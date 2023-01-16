@@ -229,6 +229,6 @@ function swain._run(){
 }
 
 # curry some args for a specific phase+command pair
-function swain.phase.curry_args(){ # "phase" "command" "other args..."
+function swain.phase.curry_args(){ # <phase> <command> [<other args>...]
 	event curry "swain:phase:$1:$2" "${@:3}"
 }
