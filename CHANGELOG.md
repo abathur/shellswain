@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2.0 (Jan 17 2023)
+- stop exporting PROMPT_COMMAND
+  
+  Not 100% certain on this change, but I see a prompt plugin maintainer with clear conviction that exporting it is wrong.
+
 ## v0.1.0 (Jan 15 2023)
 - refactor to clearly define public/private API and regularize naming
 - draft initial documentation for those APIs

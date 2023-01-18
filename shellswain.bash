@@ -13,7 +13,7 @@ fi
 shopt -s expand_aliases
 
 # set an array-safe prompt command
-export PROMPT_COMMAND=${PROMPT_COMMAND-}
+PROMPT_COMMAND=${PROMPT_COMMAND-}
 
 # double-dip:
 # - shellswain is loaded
