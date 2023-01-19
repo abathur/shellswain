@@ -2,11 +2,21 @@
 
 shellswain is a neighborly bash library you can use to build simpler event-driven bash profile/bashrc scripts and modules.
 
+## What shellswain gives you
+
+- loaded modules can emit their own arbitrary events and subscribe to events provided by other modules
+- a core set of events emitted before the first prompt, before and after each command invocation, and before shell exit
+- a way to set up command-specific before/run/after events (the run event enables you to customize how the command runs)
+- shared metadata about the most-recent command (the command, when it ran, how long it took, what the exit status was, etc.)
+- traps/signals automatically namespaced per script
+
+These features form an efficient foundation for mutual cooperation between modules and user code. They make it easy to share access to scarce shell resources and minimize duplicated work.
+
 ## Incorporating shellswain
 
 I package shellswain and its dependencies with Nix and resholve for my own use, so that's the easiest/recommended way to incorporate it into a project.
 
-> **Note:** Aside from bash 5.1, shellswain's dependencies are pure bash. It doesn't _require_ Nix and should be easy enough to package/vendor/inline outside of the Nix ecosystem. You'll also need:
+> **Note:** Aside from bash 5.1+, shellswain's dependencies are pure bash. It doesn't _require_ Nix and should be easy enough to package/vendor/inline outside of the Nix ecosystem. You'll also need:
 > - signal/trap namespacing provided by https://github.com/abathur/comity
 > - the event API provided by https://github.com/bashup/events (this is pulled in via comity, since comity also uses it)
 
