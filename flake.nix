@@ -45,6 +45,16 @@
           checks = pkgs.callPackages ./test.nix {
             inherit (pkgs) shellswain;
           };
+          devShells = {
+            default = pkgs.mkShell {
+              buildInputs = [ pkgs.shellswain ];
+              shellHook = ''
+                echo starting clean interactive bash, 'source ${pkgs.shellswain}/bin/shellswain.bash' to begin
+                ${pkgs.bashInteractive}/bin/bash --norc --noprofile -i
+                exit
+              '';
+            };
+          };
         }
     );
 }

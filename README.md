@@ -12,6 +12,8 @@ shellswain is a neighborly bash library you can use to build simpler event-drive
 
 These features form an efficient foundation for mutual cooperation between modules and user code. They make it easy to share access to scarce shell resources and minimize duplicated work.
 
+There are some basic usage examples in the [examples](examples/) directory.
+
 ## Incorporating shellswain
 
 I package shellswain and its dependencies with Nix and resholve for my own use, so that's the easiest/recommended way to incorporate it into a project.
