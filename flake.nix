@@ -47,11 +47,10 @@
           };
           devShells = {
             default = pkgs.mkShell {
-              buildInputs = [ pkgs.shellswain ];
+              # arcane because we want to hand the user an empty shell
+              # but we do want to go ahead and source the script.
               shellHook = ''
-                echo starting clean interactive bash, 'source ${pkgs.shellswain}/bin/shellswain.bash' to begin
-                ${pkgs.bashInteractive}/bin/bash --norc --noprofile -i
-                exit
+                exec env -i PATH=$PATH HOME=$(mktemp -d) PROMPT_COMMAND="source '${pkgs.shellswain}/bin/shellswain.bash'; unset PROMPT_COMMAND" ${pkgs.bashInteractive}/bin/bash --norc  --noprofile -i
               '';
             };
           };

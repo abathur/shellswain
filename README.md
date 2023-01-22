@@ -12,8 +12,6 @@ shellswain is a neighborly bash library you can use to build simpler event-drive
 
 These features form an efficient foundation for mutual cooperation between modules and user code. They make it easy to share access to scarce shell resources and minimize duplicated work.
 
-There are some basic usage examples in the [examples](examples/) directory.
-
 ## Incorporating shellswain
 
 I package shellswain and its dependencies with Nix and resholve for my own use, so that's the easiest/recommended way to incorporate it into a project.
@@ -73,6 +71,8 @@ You can find a real-world example of how I do this in https://github.com/abathur
     - resholve's Nix API is documented in the [nixpkgs README for resholve](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/misc/resholve/README.md)
 
 ## Using shellswain
+
+> **Note:** If you just want to play around with shellswain, you can run `nix develop github:abathur/shellswain` to open a bare bash shell with shellswain pre-sourced. There are also some basic usage examples in the [examples](examples/) directory.
 
 There are four main ~areas of shellswain's public API:
 

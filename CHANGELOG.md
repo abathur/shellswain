@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.0 (Jan 21 2023)
+- add and document some basic usage examples
+- nix:
+  - update comity
+  - add devShell for trying out shellswain interactively
+
 ## v0.2.0 (Jan 17 2023)
 - stop exporting PROMPT_COMMAND
   
